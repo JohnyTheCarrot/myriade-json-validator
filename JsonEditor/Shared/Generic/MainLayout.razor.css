@@ -1,0 +1,22 @@
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 664px) {
+    .page {
+        flex-direction: column;
+    }
+}
+
+main {
+    flex: 1;
+}
+
+.content {
+    padding: 16px;
+    overflow-y: auto;
+    max-height: 100vh;
+    box-sizing: border-box;
+}

@@ -1,0 +1,17 @@
+﻿@using Newtonsoft.Json.Linq
+@inherits JsonObjectBase
+
+<table>
+	@foreach (var property in JsonObject.Properties()) {
+		<tr>
+			<td>@property.Name</td>
+			<td>
+				<JsonValue
+					JsonValue="@property.Value"
+					OnChange="(e) => OnChangeProperty(property.Name, e)"
+					Name="@property.Name"
+				/>
+			</td>
+		</tr>
+	}
+</table>

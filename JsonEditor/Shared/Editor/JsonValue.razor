@@ -1,0 +1,24 @@
+﻿@inherits JsonValueBase
+@using System.Text.Json
+@using Newtonsoft.Json.Linq
+
+@switch (JsonValue.Type)
+{
+	case JTokenType.Object:
+		<ConditionalSummaryWrapper Summary="@Name">
+			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" />
+		</ConditionalSummaryWrapper>
+		break;
+	case JTokenType.Array:
+		<ConditionalSummaryWrapper Summary="@($"{Name} ({(JsonValue as JArray)!.Count})")">
+			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" />
+		</ConditionalSummaryWrapper>
+		break;
+	case JTokenType.String:
+		<JsonString Value="@(JsonValue.Value<string>())" OnChange="OnChangeString" />
+		break;
+	case JTokenType.Float:
+	case JTokenType.Integer:
+		<JsonNumber Value="@(JsonValue.Value<float>())" OnChange="OnChangeValue" />
+		break;
+}

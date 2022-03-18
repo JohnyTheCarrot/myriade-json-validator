@@ -1,0 +1,17 @@
+﻿table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+}
+
+td {
+    padding: 10px;
+}
+
+    td:first-child {
+        background-color: #bbdeff;
+    }

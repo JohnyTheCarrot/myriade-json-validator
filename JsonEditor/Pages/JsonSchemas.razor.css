@@ -1,0 +1,25 @@
+﻿.content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+}
+
+.file-upload {
+    cursor: pointer;
+    background-color: deepskyblue;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+    ::deep .file-upload input[type="file"] {
+        display: none;
+    }

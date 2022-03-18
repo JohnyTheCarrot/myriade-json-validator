@@ -1,0 +1,32 @@
+﻿button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity ease-in-out 100ms;
+}
+
+    button:hover {
+        opacity: 0.6;
+    }
+
+    button[data-variant="Primary"] {
+        background-color: deepskyblue;
+        color: white;
+    }
+
+    button[data-variant="Secondary"] {
+        background-color: lightgrey;
+        color: black;
+    }
+
+    button[data-variant="Danger"] {
+        background-color: red;
+        color: white;
+    }
+
+    button[disabled] {
+        filter: grayscale(1);
+        opacity: 0.6;
+        pointer-events: none;
+    }

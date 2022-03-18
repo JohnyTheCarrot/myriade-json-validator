@@ -1,0 +1,12 @@
+﻿@inherits ConditionalSummaryWrapperBase
+
+@if (Summary == null)
+{
+	@ChildContent
+} else
+{
+	<details>
+		<summary>@Summary</summary>
+		@ChildContent
+	</details>
+}

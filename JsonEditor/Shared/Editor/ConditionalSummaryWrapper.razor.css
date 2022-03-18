@@ -1,0 +1,9 @@
+﻿details > summary {
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #e8e9ff;
+}
+
+details[open] > summary {
+    margin-bottom: 8px;
+}

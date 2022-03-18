@@ -1,0 +1,15 @@
+﻿li {
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.error-message {
+    color: red;
+}
+
+.error {
+    background-color: #ffecec;
+    order: -1;
+}

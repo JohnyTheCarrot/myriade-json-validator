@@ -1,0 +1,41 @@
+﻿.list {
+    max-height: 30vh;
+    max-width: 690px;
+    width: 100vw;
+    overflow-y: auto;
+}
+
+.search-bar {
+    margin-bottom: 8px;
+}
+
+.letter-header {
+    border-bottom: 1px solid #0000001f;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+    .letter-header:not(:first-child) {
+        margin-top: 20px;
+    }
+
+ul {
+    padding: 0;
+}
+
+    li {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    li:hover {
+        opacity: 1;
+    }
+
+    li::marker {
+        content: "";
+    }
+
+    li[data-selected] {
+        font-weight: bold;
+    }

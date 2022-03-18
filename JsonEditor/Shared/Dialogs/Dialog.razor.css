@@ -1,0 +1,26 @@
+﻿.backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog {
+    background-color: white;
+    border-radius: 4px;
+    position: relative;
+    min-width: 250px;
+    margin: 16px;
+}
+
+.title {
+    padding: 12px;
+    margin: 0;
+    border-bottom: 1px solid #00000014;
+}

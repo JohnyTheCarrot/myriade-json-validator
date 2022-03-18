@@ -1,0 +1,36 @@
+﻿@page "/"
+@inherits IndexBase
+@using System.Text.Json
+@using JsonEditor.Shared.Generic
+@using JsonEditor.Shared.Dialogs
+@using JsonEditor.Code
+@using JsonEditor.Shared.Editor
+
+<ItemSelectDialog
+	Title="Choose a schema"
+	Show="@showSchemaSelectDialog"
+	Data="@schemas"
+	SearchByExtractor="(s) => s.FileName"
+	TItem="Schema"
+	OnConfirmed="OnSchemaSelected"
+>
+	<RowTemplate>
+		<p>@(Path.GetFileNameWithoutExtension(context.FileName))</p>
+	</RowTemplate>
+</ItemSelectDialog>
+
+<div class="content">
+	<CustomPageTitle Title="Schema Manager" />
+	<div class="schema-selector">
+		<h3>@(selectedSchema?.FileName ?? "No schema selected")</h3>
+		<Button @onclick="() => showSchemaSelectDialog = true">Select Schema</Button>
+	</div>
+	<textarea value="@jsonContent" @oninput="(e) => jsonContent = (e.Value as string)!" />
+	@if (jsonObj != null)
+	{
+		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" />
+	} else
+	{
+		<p>invalid json</p>
+	}
+</div>

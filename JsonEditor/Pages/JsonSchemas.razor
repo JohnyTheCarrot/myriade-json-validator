@@ -1,0 +1,50 @@
+﻿@page "/schemas"
+@inherits JsonSchemasBase
+@using System.Text.RegularExpressions
+@using Json.Schema
+@using System.Text.Json
+@using JsonEditor.Code
+@using JsonEditor.Shared.Dialogs
+@using JsonEditor.Shared.Generic
+
+<div class="content">
+	<CustomPageTitle Title="Schema Manager" />
+
+	<div>
+		<h4>Existing schemas (@schemas.Count)</h4>
+		@if (schemas.Count == 0)
+		{
+			<p>@("No schemas available.")</p>
+		} else {
+			<ul>
+				@foreach (var schema in schemas)
+				{
+					<SchemaListItem Schema="schema" OnRefreshRequested="UpdateSchemasList" @key="schema.FileName" />
+				}
+			</ul>
+		}
+	</div>
+
+	<label class="file-upload">
+		Upload File(s)
+		<InputFile OnChange="@SaveSchema" multiple accept=".json" />
+	</label>
+	
+	<div>
+		@if (hasStartedUpload) {
+			<h4>Upload progress & status</h4>
+			@if (isUploading)
+			{
+				<p>Uploading...</p>
+			} else
+			{
+				<ul>
+				@foreach (var result in uploadResults)
+				{
+					<SchemaUploadResult Result="@result" />
+				}
+				</ul>
+			}
+		}
+	</div>
+</div>

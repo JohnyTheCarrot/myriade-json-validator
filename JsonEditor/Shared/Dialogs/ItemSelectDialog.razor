@@ -1,0 +1,36 @@
+﻿@typeparam TItem
+@using JsonEditor.Shared.Generic
+
+<ConfirmDialog
+	Title="@Title"
+	Show="@Show"
+	OnConfirmed="() => { if (selectedItem != null) OnConfirmed?.Invoke(selectedItem); }"
+	ConfirmDisabled="@(selectedItem == null)"
+>
+	<div class="search-bar">
+		<Input Value="@search" @oninput="SearchUpdated" Placeholder="Search..." TValue="string" />
+	</div>
+	<div class="list">
+		@if (Letters.Length == 0)
+		{
+			<p>No items found.</p>
+		}
+		@foreach (var letter in Letters) {
+			<h3 @key="@($"letter-header-{letter}")" class="letter-header">
+				@letter
+			</h3>
+			<ul>
+				@foreach (var row in DataFiltered!.Where(r => SearchByExtractor!.Invoke(r)[0] == letter))
+				{
+					<li
+						@key="@($"row-{SearchByExtractor!.Invoke(row)}")"
+						@onclick="() => selectedItem = row"
+						data-selected="@(selectedItem == row)"
+					>
+						@RowTemplate!.Invoke(row)
+					</li>
+				}
+			</ul>
+		}
+	</div>
+</ConfirmDialog>

@@ -1,0 +1,10 @@
+﻿@using JsonEditor.Shared.Generic
+
+<Dialog Title="@Title" Show="@Show" OnShowChangeRequest="@OnShowChangeRequest">
+	<DialogContent>
+		@ChildContent
+	</DialogContent>
+	<DialogButtons>
+		<Button Variant="ButtonVariant.Primary" @onclick="HideDialog">@ButtonConfirmText</Button>
+	</DialogButtons>
+</Dialog>

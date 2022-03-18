@@ -1,0 +1,39 @@
+﻿@inject IJSRuntime JSRuntime
+@using JsonEditor.Shared.Dialogs
+
+<AlertDialog Title="Error" Show="@ShowErrorDialog" OnShowChangeRequest="OnShowChangeRequested">
+	@ErrorMessage
+</AlertDialog>
+<ConfirmDialog
+	Title="Are you sure?"
+	Show="@ShowDeleteDialog"
+	OnConfirmed="Delete"
+	ButtonConfirmText="Delete"
+	ConfirmButtonVariant="ButtonVariant.Danger"
+	OnShowChangeRequest="(s) => ShowDeleteDialog = s"
+>
+	<p>Are you sure you want to delete <b>@Schema!.FileName</b>?</p>
+	<p class="red-warning">This action is <b>irreversible</b>.</p>
+</ConfirmDialog>
+<ConfirmDialog
+	Title="Enter a new name"
+	Show="@ShowRenameDialog"
+	OnConfirmed="Rename"
+	ButtonConfirmText="Rename"
+	OnShowChangeRequest="(s) => ShowRenameDialog = s"
+	ConfirmDisabled="@(!ValidName)"
+>
+	<Input
+		Value="@NewName"
+		@oninput="(e) => NewName = (e.Value as string)!"
+		ValidationErrorMessage="@(!ValidName ? "Invalid name" : string.Empty)"
+		TValue="string"
+	/>
+</ConfirmDialog>
+<li>
+	@Schema!.FileName
+	<span class="options">
+		<a href="javascript:void(0)" @onclick="PromptDelete">Delete</a>
+		<a href="javascript:void(0)" @onclick="PromptRename">Rename</a>
+	</span>
+</li>

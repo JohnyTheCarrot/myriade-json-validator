@@ -1,0 +1,15 @@
+﻿@inherits SchemaUploadResultBase
+@using JsonEditor.Code
+
+@if (Result is SchemaManagementFailure)
+{
+	<li class="error">
+		@Result!.Schema
+		<span class="error-message">@Result.Message</span>
+	</li>
+} else {
+	<li>
+		@Result!.Schema
+		<span>Success!</span>
+	</li>
+}
