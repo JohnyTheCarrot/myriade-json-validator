@@ -3,13 +3,15 @@
 
 <table>
 	@foreach (var property in JsonObject.Properties()) {
-		<tr>
+		<tr @key="property.Name">
 			<td>@property.Name</td>
 			<td>
 				<JsonValue
 					JsonValue="@property.Value"
 					OnChange="(e) => OnChangeProperty(property.Name, e)"
 					Name="@property.Name"
+					Root="@Root"
+					Errors="@Errors"
 				/>
 			</td>
 		</tr>

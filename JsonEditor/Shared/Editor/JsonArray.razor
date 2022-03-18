@@ -4,13 +4,15 @@
 
 <table>
 	@foreach (var i in Enumerable.Range(0, JsonArray.Count)) {
-		<tr>
+		<tr @key="i">
 			<td>[@i]</td>
 			<td>
 				<JsonValue
 					JsonValue="@JsonArray[i]"
 					OnChange="(e) => { OnChangeProperty(i, e); }"
 					Name="@($"[{i}]")"
+					Root="@Root"
+					Errors="@Errors"
 				/>
 			</td>
 		</tr>

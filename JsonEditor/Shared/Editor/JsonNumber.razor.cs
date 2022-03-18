@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 
 namespace JsonEditor.Shared.Editor
@@ -13,7 +14,15 @@ namespace JsonEditor.Shared.Editor
 
         public void OnInput(ChangeEventArgs e)
         {
-            OnChange?.Invoke(float.Parse((e.Value as string)!));
+            var value = (e.Value as string)!;
+            var safeValue = value.Length == 0 ? "0": value;
+            if (!float.TryParse(safeValue, NumberStyles.Any, CultureInfo.InvariantCulture, out float valueFloat))
+                return;
+
+            if (valueFloat % 1f == 0f)
+                OnChange?.Invoke((int) valueFloat);
+            else
+                OnChange?.Invoke(valueFloat);
         }
     }
 }

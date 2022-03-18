@@ -1,0 +1,12 @@
+﻿.null {
+    color: red;
+}
+
+.validation-error {
+    margin: 0;
+    margin-top: 8px;
+    color: white;
+    padding: 10px 20px;
+    background-color: red;
+    border-radius: 4px;
+}

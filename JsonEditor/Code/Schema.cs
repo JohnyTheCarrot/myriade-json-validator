@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Code
 {
@@ -34,10 +35,19 @@ namespace JsonEditor.Code
 				SchemaFolderName
 			);
 
-			return Directory.GetFiles(basePath)
-				.Select(f => new Schema(f))
-				.ToList();
+			try
+			{
+				return Directory.GetFiles(basePath)
+					.Select(f => new Schema(f))
+					.ToList();
+			} catch (DirectoryNotFoundException)
+            {
+				Directory.CreateDirectory(basePath);
+				return GetSchemas(contentRootPath);
+            }
 		}
+
+		public JSchema GetJSchema() => JSchema.Parse(GetContents());
 
 		public static async Task<SchemaManagementResult> SaveSchema(
 			string contentRootPath,

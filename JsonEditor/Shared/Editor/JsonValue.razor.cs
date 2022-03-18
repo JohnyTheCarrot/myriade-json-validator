@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Shared.Editor
 {
@@ -12,10 +13,19 @@ namespace JsonEditor.Shared.Editor
         [Parameter]
         public Action<JToken>? OnChange { get; set; }
 
+        [Parameter, EditorRequired]
+        public IList<ValidationError>? Errors { get; set; } = default!;
+
+        [Parameter, EditorRequired]
+        public JToken Root { get; set; } = default!;
+
+        protected IEnumerable<ValidationError>? RelevantErrors => Errors?
+            .Where(e => Root.SelectToken(e.Path) == JsonValue);
+
         [Parameter]
         public string? Name { get; set; }
 
-        protected void OnChangeValue<T>(T newValue) where T : JToken
+        protected void OnChangeValue(JToken newValue)
         {
             JsonValue = newValue;
             OnChange?.Invoke(newValue);
@@ -24,7 +34,7 @@ namespace JsonEditor.Shared.Editor
         protected void OnChangeString(string newValue)
         {
             var preparedString = JsonConvert.ToString(newValue);
-            OnChangeValue(JToken.Parse($"{preparedString}"));
+            OnChangeValue(JToken.Parse(preparedString));
         }
     }
 }

@@ -6,12 +6,12 @@
 {
 	case JTokenType.Object:
 		<ConditionalSummaryWrapper Summary="@Name">
-			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" />
+			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" Root="@Root" Errors="@Errors" />
 		</ConditionalSummaryWrapper>
 		break;
 	case JTokenType.Array:
 		<ConditionalSummaryWrapper Summary="@($"{Name} ({(JsonValue as JArray)!.Count})")">
-			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" />
+			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" Root="@Root" Errors="@Errors" />
 		</ConditionalSummaryWrapper>
 		break;
 	case JTokenType.String:
@@ -21,4 +21,14 @@
 	case JTokenType.Integer:
 		<JsonNumber Value="@(JsonValue.Value<float>())" OnChange="OnChangeValue" />
 		break;
+	case JTokenType.Boolean:
+		<JsonBoolean Value="@(JsonValue.Value<bool>())" OnChange="OnChangeValue" />
+		break;
+	case JTokenType.Null:
+		<span class="null">no value (null)</span>
+		break;
 }
+@if (RelevantErrors != null)
+	@foreach (var error in RelevantErrors) {
+		<p class="validation-error">@error.Message</p>
+	}

@@ -6,6 +6,7 @@
 	Show="@Show"
 	OnConfirmed="() => { if (selectedItem != null) OnConfirmed?.Invoke(selectedItem); }"
 	ConfirmDisabled="@(selectedItem == null)"
+	OnShowChangeRequest="@OnShowChangeRequest"
 >
 	<div class="search-bar">
 		<Input Value="@search" @oninput="SearchUpdated" Placeholder="Search..." TValue="string" />

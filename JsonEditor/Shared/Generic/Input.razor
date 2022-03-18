@@ -1,7 +1,7 @@
 ﻿@typeparam TValue
 
 <div>
-	<input type="@Type" placeholder="@Placeholder" @bind="Value" @oninput="OnInput" />
+	<input type="@Type" placeholder="@Placeholder" @bind="Value" @oninput="OnInput" lang="en-US" />
 	@if (ValidationErrorMessage != string.Empty) {
 		<p class="validation-error">@ValidationErrorMessage</p>
 	}

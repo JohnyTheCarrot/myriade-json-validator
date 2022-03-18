@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Shared.Editor
 {
@@ -10,6 +11,12 @@ namespace JsonEditor.Shared.Editor
 
         [Parameter]
         public Action<JArray>? OnChange { get; set; }
+
+        [Parameter, EditorRequired]
+        public JToken Root { get; set; } = default!;
+
+        [Parameter, EditorRequired]
+        public IList<ValidationError>? Errors { get; set; } = default!;
 
         public void OnChangeProperty(int index, JToken newValue)
         {

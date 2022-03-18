@@ -1,6 +1,7 @@
 ﻿using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Pages
 {
@@ -9,10 +10,6 @@ namespace JsonEditor.Pages
 		[Inject]
 		protected IWebHostEnvironment Environment { get; set; } = default!;
 
-		private string basePath => Path.Combine(
-			Environment.ContentRootPath,
-			"schemas"
-		);
 		protected List<Schema> schemas = new();
 		protected Schema? selectedSchema;
 		protected string schemaSearch = string.Empty;
@@ -27,10 +24,18 @@ namespace JsonEditor.Pages
 				} catch (Exception)
                 {
 					jsonObj = null;
+					return;
                 }
+				if (selectedSchema != null)
+				{
+					var schema = selectedSchema.GetJSchema();
+					JsonValid = jsonObj.IsValid(schema, out errors);
+				}
 			}
 		}
 		protected JToken? jsonObj;
+		protected bool JsonValid = false;
+		protected IList<ValidationError> errors = new List<ValidationError>();
 
 		protected override void OnInitialized()
 		{

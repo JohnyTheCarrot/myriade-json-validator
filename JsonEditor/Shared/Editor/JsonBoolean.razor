@@ -1,0 +1,3 @@
+﻿@inherits JsonBooleanBase
+
+<input type="checkbox" value="@Value" @onchange="(e) => OnChange(e.Value as bool? ?? false)" />

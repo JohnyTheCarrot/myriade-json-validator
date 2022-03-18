@@ -13,6 +13,7 @@
 	SearchByExtractor="(s) => s.FileName"
 	TItem="Schema"
 	OnConfirmed="OnSchemaSelected"
+	OnShowChangeRequest="(s) => showSchemaSelectDialog = s"
 >
 	<RowTemplate>
 		<p>@(Path.GetFileNameWithoutExtension(context.FileName))</p>
@@ -25,10 +26,29 @@
 		<h3>@(selectedSchema?.FileName ?? "No schema selected")</h3>
 		<Button @onclick="() => showSchemaSelectDialog = true">Select Schema</Button>
 	</div>
+	@if (JsonValid)
+	{
+		<div class="validity valid">
+			<p>JSON Valid!</p>
+		</div>
+	} else
+	{
+		<div class="validity invalid">
+			<p>JSON Invalid</p>
+			<ul>
+				@foreach (var error in errors)
+				{
+					<li @key="@(error.LineNumber + ":" + error.LinePosition)">
+						@error.Message
+					</li>
+				}
+			</ul>
+		</div>
+	}
 	<textarea value="@jsonContent" @oninput="(e) => jsonContent = (e.Value as string)!" />
 	@if (jsonObj != null)
 	{
-		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" />
+		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" Errors="@errors" Root="@jsonObj" />
 	} else
 	{
 		<p>invalid json</p>
