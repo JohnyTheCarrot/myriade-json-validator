@@ -13,9 +13,6 @@ namespace JsonEditor.Shared.Editor
         public Action<JArray>? OnChange { get; set; }
 
         [Parameter, EditorRequired]
-        public JToken Root { get; set; } = default!;
-
-        [Parameter, EditorRequired]
         public IList<ValidationError>? Errors { get; set; } = default!;
 
         public void OnChangeProperty(int index, JToken newValue)

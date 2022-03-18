@@ -16,11 +16,8 @@ namespace JsonEditor.Shared.Editor
         [Parameter, EditorRequired]
         public IList<ValidationError>? Errors { get; set; } = default!;
 
-        [Parameter, EditorRequired]
-        public JToken Root { get; set; } = default!;
-
         protected IEnumerable<ValidationError>? RelevantErrors => Errors?
-            .Where(e => Root.SelectToken(e.Path) == JsonValue);
+            .Where(e => JsonValue.Root.SelectToken(e.Path) == JsonValue);
 
         [Parameter]
         public string? Name { get; set; }

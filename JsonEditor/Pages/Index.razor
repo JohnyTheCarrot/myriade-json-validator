@@ -48,7 +48,7 @@
 	<textarea value="@jsonContent" @oninput="(e) => jsonContent = (e.Value as string)!" />
 	@if (jsonObj != null)
 	{
-		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" Errors="@errors" Root="@jsonObj" />
+		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" Errors="@errors" />
 	} else
 	{
 		<p>invalid json</p>

@@ -6,12 +6,12 @@
 {
 	case JTokenType.Object:
 		<ConditionalSummaryWrapper Summary="@Name">
-			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" Root="@Root" Errors="@Errors" />
+			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" Errors="@Errors" />
 		</ConditionalSummaryWrapper>
 		break;
 	case JTokenType.Array:
 		<ConditionalSummaryWrapper Summary="@($"{Name} ({(JsonValue as JArray)!.Count})")">
-			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" Root="@Root" Errors="@Errors" />
+			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" Errors="@Errors" />
 		</ConditionalSummaryWrapper>
 		break;
 	case JTokenType.String:
