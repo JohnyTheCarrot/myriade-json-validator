@@ -1,10 +1,11 @@
-﻿using JsonEditor.Code;
+﻿using System;
+using System.IO;
+using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace JsonEditor.Shared.Generic
 {
-	public partial class SchemaListItem : ComponentBase
+	public class SchemaListItemBase : ComponentBase
 	{
 		[Parameter]
 		public Schema? Schema { get; set; }
@@ -12,22 +13,22 @@ namespace JsonEditor.Shared.Generic
 		[Parameter]
 		public Action? OnRefreshRequested { get; set; }
 
-		private bool 
-			ShowErrorDialog = false,
-			ShowDeleteDialog = false,
-			ShowRenameDialog = false;
-		private string ErrorMessage = string.Empty;
+		protected bool 
+			ShowErrorDialog,
+			ShowDeleteDialog,
+			ShowRenameDialog;
+		protected string ErrorMessage = string.Empty;
 
-		private string NewName = string.Empty;
+		protected string NewName = string.Empty;
 
-		private bool ValidName => Schema.IsValidRenameFileName(NewName);
+		protected bool ValidName => Schema.IsValidRenameFileName(NewName);
 
-		private void PromptDelete()
+		protected void PromptDelete()
 		{
 			ShowDeleteDialog = true;
 		}
 
-		private void Delete()
+		protected void Delete()
 		{
 			var result = Schema?.Delete();
 			if (result is SchemaManagementFailure)
@@ -40,13 +41,13 @@ namespace JsonEditor.Shared.Generic
 			OnRefreshRequested?.Invoke();
 		}
 
-		private void PromptRename()
+		protected void PromptRename()
 		{
 			NewName = Path.GetFileNameWithoutExtension(Schema!.FileName);
 			ShowRenameDialog = true;
 		}
 
-		private void Rename()
+		protected void Rename()
         {
 			var result = Schema?.Rename(NewName);
 			if (result is SchemaManagementFailure)
@@ -61,7 +62,7 @@ namespace JsonEditor.Shared.Generic
 			OnRefreshRequested?.Invoke();
 		}
 
-		private void OnShowChangeRequested(bool show)
+		protected void OnShowChangeRequested(bool show)
 		{
 			ShowErrorDialog = show;
 		}

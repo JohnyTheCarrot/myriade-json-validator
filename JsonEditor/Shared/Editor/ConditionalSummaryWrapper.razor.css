@@ -2,6 +2,7 @@
     padding: 10px;
     border-radius: 4px;
     background-color: #e8e9ff;
+    cursor: pointer;
 }
 
 details[open] > summary {

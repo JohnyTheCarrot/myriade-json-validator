@@ -1,5 +1,8 @@
-﻿using JsonEditor.Code;
+﻿using System;
+using System.Collections.Generic;
+using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
@@ -10,48 +13,46 @@ namespace JsonEditor.Pages
 		[Inject]
 		protected IWebHostEnvironment Environment { get; set; } = default!;
 
-		protected List<Schema> schemas = new();
-		protected Schema? selectedSchema;
-		protected string schemaSearch = string.Empty;
-		protected bool showSchemaSelectDialog = false;
-		private string json = string.Empty;
-		protected string jsonContent { get => json; set
+		protected List<Schema> Schemas = new();
+		protected Schema? SelectedSchema;
+		protected bool ShowSchemaSelectDialog;
+		private string _json = string.Empty;
+		protected string JsonContent { get => _json; set
             {
-				json = value;
+				_json = value;
 				try
 				{
-					jsonObj = JToken.Parse(json);
+					JsonObj = JToken.Parse(_json);
 				} catch (Exception)
                 {
-					jsonObj = null;
+					JsonObj = null;
 					return;
                 }
-				if (selectedSchema != null)
-				{
-					var schema = selectedSchema.GetJSchema();
-					JsonValid = jsonObj.IsValid(schema, out errors);
-				}
-			}
+
+				if (SelectedSchema == null) return;
+				var schema = SelectedSchema.GetJSchema();
+				JsonValid = JsonObj.IsValid(schema, out Errors);
+            }
 		}
-		protected JToken? jsonObj;
-		protected bool JsonValid = false;
-		protected IList<ValidationError> errors = new List<ValidationError>();
+		protected JToken? JsonObj;
+		protected bool JsonValid;
+		protected IList<ValidationError> Errors = new List<ValidationError>();
 
 		protected override void OnInitialized()
 		{
-			schemas = Schema.GetSchemas(Environment.ContentRootPath);
+			Schemas = Schema.GetSchemas(Environment.ContentRootPath);
 		}
 
 		protected void OnSchemaSelected(Schema s)
 		{
-			selectedSchema = s;
+			SelectedSchema = s;
 			StateHasChanged();
-			showSchemaSelectDialog = false;
+			ShowSchemaSelectDialog = false;
 		}
 
 		protected void OnJsonChange(JToken jToken)
         {
-			jsonContent = jToken.ToString();
+			JsonContent = jToken.ToString();
 			StateHasChanged();
         }
 	}

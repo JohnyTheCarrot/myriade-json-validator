@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Shared.Editor
 {
@@ -11,8 +13,10 @@ namespace JsonEditor.Shared.Editor
 
         [Parameter]
         public Action<JToken>? OnChange { get; set; }
+        
+        [Parameter] public JSchema? Schema { get; set; }
 
-        public void OnInput(ChangeEventArgs e)
+        protected void OnInput(ChangeEventArgs e)
         {
             var value = (e.Value as string)!;
             var safeValue = value.Length == 0 ? "0": value;

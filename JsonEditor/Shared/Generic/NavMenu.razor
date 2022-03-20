@@ -1,13 +1,15 @@
-﻿<nav class="nav-menu" data-shown-mobile="@_shownMobile">
+﻿@inherits NavMenuBase
+
+<nav class="nav-menu" data-shown-mobile="@ShownMobile">
 	<div class="close-button">
-		<Button @onclick="() => _shownMobile = false">Close</Button>
+		<Button @onclick="() => ShownMobile = false">Close</Button>
 	</div>
-	@foreach (var link in links) {
+	@foreach (var link in Links) {
 		<div class="link" @key="link.Path">
-			<NavLink href="@link.Path" Match=NavLinkMatch.All @onclick="() => _shownMobile = false">@link.Name</NavLink>
+			<NavLink href="@link.Path" Match=NavLinkMatch.All @onclick="() => ShownMobile = false">@link.Name</NavLink>
 		</div>
 	}
 </nav>
 <header>
-	<Button @onclick="() => _shownMobile = true">Open Nav</Button>
+	<Button @onclick="() => ShownMobile = true">Open Nav</Button>
 </header>

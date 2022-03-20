@@ -1,19 +1,19 @@
 ﻿@page "/"
 @inherits IndexBase
-@using System.Text.Json
 @using JsonEditor.Shared.Generic
 @using JsonEditor.Shared.Dialogs
 @using JsonEditor.Code
 @using JsonEditor.Shared.Editor
+@using System.IO
 
 <ItemSelectDialog
 	Title="Choose a schema"
-	Show="@showSchemaSelectDialog"
-	Data="@schemas"
-	SearchByExtractor="(s) => s.FileName"
+	Show="@ShowSchemaSelectDialog"
+	Data="@Schemas"
+	SearchByExtractor="s => s.FileName"
 	TItem="Schema"
 	OnConfirmed="OnSchemaSelected"
-	OnShowChangeRequest="(s) => showSchemaSelectDialog = s"
+	OnShowChangeRequest="s => ShowSchemaSelectDialog = s"
 >
 	<RowTemplate>
 		<p>@(Path.GetFileNameWithoutExtension(context.FileName))</p>
@@ -23,8 +23,8 @@
 <div class="content">
 	<CustomPageTitle Title="Schema Manager" />
 	<div class="schema-selector">
-		<h3>@(selectedSchema?.FileName ?? "No schema selected")</h3>
-		<Button @onclick="() => showSchemaSelectDialog = true">Select Schema</Button>
+		<h3>@(SelectedSchema?.FileName ?? "No schema selected")</h3>
+		<Button @onclick="() => ShowSchemaSelectDialog = true">Select Schema</Button>
 	</div>
 	@if (JsonValid)
 	{
@@ -36,7 +36,7 @@
 		<div class="validity invalid">
 			<p>JSON Invalid</p>
 			<ul>
-				@foreach (var error in errors)
+				@foreach (var error in Errors)
 				{
 					<li @key="@(error.LineNumber + ":" + error.LinePosition)">
 						@error.Message
@@ -45,10 +45,10 @@
 			</ul>
 		</div>
 	}
-	<textarea value="@jsonContent" @oninput="(e) => jsonContent = (e.Value as string)!" />
-	@if (jsonObj != null)
+	<textarea value="@JsonContent" @oninput="e => JsonContent = (e.Value as string)!"></textarea>
+	@if (JsonObj != null)
 	{
-		<JsonValue JsonValue="@jsonObj" OnChange="OnJsonChange" Errors="@errors" />
+		<JsonValue JsonValue="@JsonObj" OnChange="OnJsonChange" Errors="@Errors" Schema="@SelectedSchema?.GetJSchema()" />
 	} else
 	{
 		<p>invalid json</p>

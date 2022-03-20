@@ -2,7 +2,7 @@
 
 namespace JsonEditor.Shared.Generic
 {
-	public partial class CustomPageTitle : ComponentBase
+	public class CustomPageTitleBase : ComponentBase
 	{
 		[Parameter]
 		public string Title { get; set; } = "Title";

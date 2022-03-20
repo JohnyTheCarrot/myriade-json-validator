@@ -1,34 +1,61 @@
 ﻿@inherits JsonValueBase
-@using System.Text.Json
 @using Newtonsoft.Json.Linq
+@using JsonEditor.Shared.Generic
+@using JsonEditor.Code
 
-@switch (JsonValue.Type)
-{
-	case JTokenType.Object:
-		<ConditionalSummaryWrapper Summary="@Name">
-			<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" Errors="@Errors" />
-		</ConditionalSummaryWrapper>
-		break;
-	case JTokenType.Array:
-		<ConditionalSummaryWrapper Summary="@($"{Name} ({(JsonValue as JArray)!.Count})")">
-			<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" Errors="@Errors" />
-		</ConditionalSummaryWrapper>
-		break;
-	case JTokenType.String:
-		<JsonString Value="@(JsonValue.Value<string>())" OnChange="OnChangeString" />
-		break;
-	case JTokenType.Float:
-	case JTokenType.Integer:
-		<JsonNumber Value="@(JsonValue.Value<float>())" OnChange="OnChangeValue" />
-		break;
-	case JTokenType.Boolean:
-		<JsonBoolean Value="@(JsonValue.Value<bool>())" OnChange="OnChangeValue" />
-		break;
-	case JTokenType.Null:
-		<span class="null">no value (null)</span>
-		break;
-}
-@if (RelevantErrors != null)
-	@foreach (var error in RelevantErrors) {
-		<p class="validation-error">@error.Message</p>
+<div>
+	@if (Schema?.Description != null)
+	{
+		<div class="description">
+			<b>Description</b>
+			<p>@Schema.Description</p>
+		</div>
 	}
+	@switch (JsonValue.Type)
+	{
+		case JTokenType.Object:
+			<ConditionalSummaryWrapper Summary="@Name">
+				<JsonObject JsonObject="@(JsonValue as JObject)" OnChange="OnChangeValue" Errors="@Errors" Schema="@Schema"/>
+			</ConditionalSummaryWrapper>
+			break;
+		case JTokenType.Array:
+			<ConditionalSummaryWrapper Summary="@($"{Name} ({(JsonValue as JArray)!.Count})")">
+				<JsonArray JsonArray="@(JsonValue as JArray)" OnChange="OnChangeValue" Errors="@Errors" Schema="@Schema"/>
+			</ConditionalSummaryWrapper>
+			break;
+		case JTokenType.String:
+			<JsonString Value="@(JsonValue.Value<string>())" OnChange="OnChangeString" Schema="@Schema"/>
+			break;
+		case JTokenType.Float:
+		case JTokenType.Integer:
+			<JsonNumber Value="@(JsonValue.Value<float>())" OnChange="OnChangeValue" Schema="@Schema"/>
+			break;
+		case JTokenType.Boolean:
+			<JsonBoolean Value="@(JsonValue.Value<bool>())" OnChange="OnChangeValue"/>
+			break;
+		case JTokenType.Null:
+			<p class="null">no value (null)</p>
+			break;
+	}
+	<div class="extra">
+		<Select OnChange="OnChangeType">
+			@foreach (var (typeName, type) in TypeUtils.GetPossibleTypes(Schema))
+			{
+				<option selected="@(TypeUtils.JTokenTypeToJSchemaType(JsonValue.Type) == type)" value="@type">
+					@typeName
+				</option>
+			}
+		</Select>
+		@if (!IsAcceptableType())
+		{
+			<p class="validation-error">Invalid type, type options are: @Schema!.Type.ToString()</p>
+		}
+		@if (RelevantErrors != null)
+		{
+			@foreach (var error in RelevantErrors)
+			{
+				<p class="validation-error">@error.Message</p>
+			}
+		}
+	</div>
+</div>

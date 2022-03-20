@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using JsonEditor.Shared.Generic;
 
 namespace JsonEditor.Shared.Dialogs

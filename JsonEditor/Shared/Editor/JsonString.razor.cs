@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Shared.Editor
 {
@@ -9,8 +11,10 @@ namespace JsonEditor.Shared.Editor
 
         [Parameter]
         public Action<string>? OnChange { get; set; }
+        
+        [Parameter] public JSchema? Schema { get; set; }
 
-        public void OnInput(ChangeEventArgs e)
+        protected void OnInput(ChangeEventArgs e)
         {
             OnChange?.Invoke((e.Value as string)!);
         }

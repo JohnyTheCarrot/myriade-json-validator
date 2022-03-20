@@ -1,30 +1,25 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Timers;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Hosting;
 
 namespace JsonEditor.Pages
 {
     public class JsonSchemasBase : ComponentBase
     {
-		Regex fileNameRegex = new(@"^[\w\- \(\)\.]+\.json$"); // put common filename regex parts in separate constant => don't put in config, though
-		Regex fileNameRenameRegex = new(@"^[\w\- \(\)\.]+$");
-		protected bool isUploading = false, hasStartedUpload = false;
+	    protected bool IsUploading, HasStartedUpload;
 
 		[Inject]
 		protected IWebHostEnvironment Environment { get; set; } = default!;
 
-		protected string? errorMessage = null;
-		protected List<SchemaManagementResult> uploadResults = new();
-		protected List<Schema> schemas = new();
-		public bool ShouldShowDeleteDialog = false;
+		protected readonly List<SchemaManagementResult> UploadResults = new();
+		protected List<Schema> Schemas = new();
 
 		protected void UpdateSchemasList()
 		{
-			schemas = Schema.GetSchemas(Environment.ContentRootPath);
+			Schemas = Schema.GetSchemas(Environment.ContentRootPath);
 			StateHasChanged();
 		}
 
@@ -35,23 +30,22 @@ namespace JsonEditor.Pages
 
 		protected async Task SaveSchema(InputFileChangeEventArgs e)
 		{
-			uploadResults.Clear();
-			hasStartedUpload = true;
-			if (e.FileCount > Schema.maxNumberOfFilesPerUpload)
+			UploadResults.Clear();
+			HasStartedUpload = true;
+			if (e.FileCount > Schema.MaxNumberOfFilesPerUpload)
 			{
-				errorMessage = $"Maximum number of files per upload exceeded: {Schema.maxNumberOfFilesPerUpload}";
 				return;
 			}
-			isUploading = true;
-			var files = e.GetMultipleFiles(Schema.maxNumberOfFilesPerUpload);
+			IsUploading = true;
+			var files = e.GetMultipleFiles(Schema.MaxNumberOfFilesPerUpload);
 
 			foreach (var file in files)
 			{
 				var result = await Schema.SaveSchema(Environment.ContentRootPath, file);
-				uploadResults.Add(result);
+				UploadResults.Add(result);
 			}
 
-			isUploading = false;
+			IsUploading = false;
 			UpdateSchemasList();
 		}
 	}

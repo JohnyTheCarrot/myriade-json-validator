@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Components;
 
 namespace JsonEditor.Shared.Dialogs
 {
@@ -28,25 +31,23 @@ namespace JsonEditor.Shared.Dialogs
         [Parameter]
         public bool Show { get; set; } = false;
 
-        private TItem? selectedItem;
+        private TItem? _selectedItem;
 
-        private string search = string.Empty;
+        private string _search = string.Empty;
 
-        private IEnumerable<TItem> DataFiltered => Data!.Where(r => SearchByExtractor!.Invoke(r).ToLower().Contains(search.ToLower()));
+        private IEnumerable<TItem> DataFiltered => Data!.Where(r => SearchByExtractor!.Invoke(r).ToLower().Contains(_search.ToLower()));
 
-        private char[] Letters
-        {
-            get => DataFiltered!
-                    .Select(SearchByExtractor!)
-                    .Select(s => s[0])
-                    .Distinct()
-                    .OrderBy(c => c)
-                    .ToArray();
-        }
+        private char[] Letters =>
+            DataFiltered!
+                .Select(SearchByExtractor!)
+                .Select(s => s[0])
+                .Distinct()
+                .OrderBy(c => c)
+                .ToArray();
 
         private void SearchUpdated(ChangeEventArgs e)
         {
-            search = ((string?) e.Value)!;
+            _search = ((string?) e.Value)!;
         }
     }
 }

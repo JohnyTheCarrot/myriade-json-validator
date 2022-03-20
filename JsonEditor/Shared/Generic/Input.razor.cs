@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 
 namespace JsonEditor.Shared.Generic
 {
-    public partial class Input<TValue> : ComponentBase
+    public class InputBase<TValue> : ComponentBase
     {
         [Parameter]
         public string Label { get; set; } = string.Empty;
@@ -17,7 +18,7 @@ namespace JsonEditor.Shared.Generic
         public EventCallback<ChangeEventArgs> OnInput { get; set; }
 
         [Parameter]
-        public bool FocusOnShow { get; set; } = false;
+        public bool FocusOnShow { get; set; }
 
         [Parameter]
         public string ValidationErrorMessage { get; set; } = string.Empty;

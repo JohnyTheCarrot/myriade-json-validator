@@ -1,5 +1,10 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,23 +14,24 @@ namespace JsonEditor.Code
 {
 	public class Schema
 	{
-		public const int maxFileSizeBytes = 512_000, maxNumberOfFilesPerUpload = 20;
-		public const string fileNameAllowedRegex = @"[\w\- \(\)\.]+";
-		public static Regex fileNameRenameRegex = new($@"^{fileNameAllowedRegex}$");
-		public static Regex fileNameRegex = new($@"^{fileNameAllowedRegex}\.json$");
+		private const int MaxFileSizeBytes = 512_000;
+		public const int MaxNumberOfFilesPerUpload = 20;
+		private const string FileNameAllowedRegex = @"[\w\- \(\)\.]+";
+		private static readonly Regex FileNameRenameRegex = new($@"^{FileNameAllowedRegex}$");
+		private static readonly Regex FileNameRegex = new($@"^{FileNameAllowedRegex}\.json$");
 		private const string SchemaFolderName = "schemas";
 
-		public string FilePath { get; private set; }
+		private string FilePath { get; }
 		public string FileName => Path.GetFileName(FilePath);
 
-		public Schema(string filePath)
+		private Schema(string filePath)
 		{
 			FilePath = filePath;
 		}
 
 		public static bool IsValidRenameFileName(string name)
         {
-			return fileNameRenameRegex.IsMatch(name);
+			return FileNameRenameRegex.IsMatch(name);
         }
 
 		public static List<Schema> GetSchemas(string contentRootPath)
@@ -53,10 +59,10 @@ namespace JsonEditor.Code
 			string contentRootPath,
 			IBrowserFile file
 		) {
-			if (file.Size > maxFileSizeBytes)
-				return new SchemaManagementFailure(file.Name, $"Maximum filesize of {maxFileSizeBytes / 1000}KB exceeded.");
+			if (file.Size > MaxFileSizeBytes)
+				return new SchemaManagementFailure(file.Name, $"Maximum filesize of {MaxFileSizeBytes / 1000}KB exceeded.");
 
-			if (!fileNameRegex.IsMatch(file.Name))
+			if (!FileNameRegex.IsMatch(file.Name))
 				return new SchemaManagementFailure(file.Name, "Invalid file name. Don't forget to end the file name with '.json'.");
 
 			var path = Path.Combine(
@@ -86,7 +92,7 @@ namespace JsonEditor.Code
 			return new SchemaManagementSuccess(file.Name);
 		}
 
-		public string GetContents() => File.ReadAllText(FilePath);
+		private string GetContents() => File.ReadAllText(FilePath);
 
 		public SchemaManagementResult Rename(string newName)
 		{
@@ -98,7 +104,7 @@ namespace JsonEditor.Code
 				$"{newName}.json"
 			);
 
-			if (!fileNameRenameRegex.IsMatch(newName))
+			if (!FileNameRenameRegex.IsMatch(newName))
 				return new SchemaManagementFailure(FileName, "Invalid file name.");
 
 			if (File.Exists(path))

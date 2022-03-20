@@ -1,0 +1,5 @@
+@inherits SelectBase
+
+<select @onchange="e => OnChange?.Invoke((string)e.Value!)">
+    @ChildContent
+</select>

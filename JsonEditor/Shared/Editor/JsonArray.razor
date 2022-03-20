@@ -1,19 +1,31 @@
-﻿@inherits JsonArrayBase
-@using Newtonsoft.Json.Linq
+﻿@using JsonEditor.Code
 @using JsonEditor.Shared.Generic
+@inherits JsonArrayBase
 
-<table>
-	@foreach (var i in Enumerable.Range(0, JsonArray.Count)) {
-		<tr @key="i">
-			<td>[@i]</td>
-			<td>
-				<JsonValue
-					JsonValue="@JsonArray[i]"
-					OnChange="(e) => { OnChangeProperty(i, e); }"
-					Name="@($"[{i}]")"
-					Errors="@Errors"
-				/>
-			</td>
-		</tr>
-	}
-</table>
+<div>
+	<table>
+		@foreach (var i in Enumerable.Range(0, JsonArray.Count)) {
+			<tr @key="i">
+				<td>[@i]</td>
+				<td>
+					<JsonValue
+						JsonValue="@JsonArray[i]"
+						OnChange="(e) => { OnChangeProperty(i, e); }"
+						Name="@($"[{i}]")"
+						Errors="@Errors"
+						Schema="@GetItemSchema(i)"
+					/>
+				</td>
+			</tr>
+		}
+	</table>
+	<div class="add-type">
+		<Select OnChange="TypeSelected">
+			@foreach (var (typeName, type) in TypeUtils.GetPossibleTypes(GetItemSchema(JsonArray.Count)))
+			{
+				<option value="@type">@typeName</option>
+			}
+		</Select>
+		<Button @onclick="Add">Add</Button>
+	</div>
+</div>

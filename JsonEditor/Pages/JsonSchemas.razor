@@ -1,23 +1,18 @@
 ﻿@page "/schemas"
 @inherits JsonSchemasBase
-@using System.Text.RegularExpressions
-@using Json.Schema
-@using System.Text.Json
-@using JsonEditor.Code
-@using JsonEditor.Shared.Dialogs
 @using JsonEditor.Shared.Generic
 
 <div class="content">
 	<CustomPageTitle Title="Schema Manager" />
 
 	<div>
-		<h4>Existing schemas (@schemas.Count)</h4>
-		@if (schemas.Count == 0)
+		<h4>Existing schemas (@Schemas.Count)</h4>
+		@if (Schemas.Count == 0)
 		{
 			<p>@("No schemas available.")</p>
 		} else {
 			<ul>
-				@foreach (var schema in schemas)
+				@foreach (var schema in Schemas)
 				{
 					<SchemaListItem Schema="schema" OnRefreshRequested="UpdateSchemasList" @key="schema.FileName" />
 				}
@@ -31,15 +26,15 @@
 	</label>
 	
 	<div>
-		@if (hasStartedUpload) {
+		@if (HasStartedUpload) {
 			<h4>Upload progress & status</h4>
-			@if (isUploading)
+			@if (IsUploading)
 			{
 				<p>Uploading...</p>
 			} else
 			{
 				<ul>
-				@foreach (var result in uploadResults)
+				@foreach (var result in UploadResults)
 				{
 					<SchemaUploadResult Result="@result" />
 				}
