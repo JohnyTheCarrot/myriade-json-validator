@@ -10,7 +10,7 @@
 	OnConfirmed="Delete"
 	ButtonConfirmText="Delete"
 	ConfirmButtonVariant="ButtonVariant.Danger"
-	OnShowChangeRequest="(s) => ShowDeleteDialog = s"
+	OnShowChangeRequest="s => ShowDeleteDialog = s"
 >
 	<p>Are you sure you want to delete <b>@Schema!.FileName</b>?</p>
 	<p class="red-warning">This action is <b>irreversible</b>.</p>
@@ -20,12 +20,12 @@
 	Show="@ShowRenameDialog"
 	OnConfirmed="Rename"
 	ButtonConfirmText="Rename"
-	OnShowChangeRequest="(s) => ShowRenameDialog = s"
+	OnShowChangeRequest="s => ShowRenameDialog = s"
 	ConfirmDisabled="@(!ValidName)"
 >
 	<Input
 		Value="@NewName"
-		@oninput="(e) => NewName = (e.Value as string)!"
+		@oninput="e => NewName = (e.Value as string)!"
 		ValidationErrorMessage="@(!ValidName ? "Invalid name" : string.Empty)"
 		TValue="string"
 	/>

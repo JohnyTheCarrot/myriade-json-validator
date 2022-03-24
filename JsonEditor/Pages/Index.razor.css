@@ -1,0 +1,67 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #0000001f;
+    margin-bottom: 24px;
+}
+
+::deep .header > * {
+    margin: 0;
+}
+
+.json-editor {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    height: 100%;
+    overflow: hidden;
+}
+
+    .json-editor[data-invalid]::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        backdrop-filter: blur(8px);
+        background-color: rgba(255, 0, 0, 0.5);
+    }
+    
+.json-value {
+    flex: 1;
+    overflow-y: auto;
+}
+
+    ::deep .json-value > .value {
+        max-height: calc(100vh - 38px);
+        padding-bottom: 32px;
+        box-sizing: border-box;
+    }
+
+.file-upload {
+    cursor: pointer;
+    background-color: deepskyblue;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    width: fit-content;
+    display: block;
+    margin-bottom: 16px;
+}
+
+::deep .file-upload input[type="file"] {
+    display: none;
+}
+
+.content {
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}

@@ -3,12 +3,12 @@
 @using JsonEditor.Shared.Generic
 @using JsonEditor.Code
 
-<div>
+<div class="value" data-hover="@(InteractionStore.HoveredPath == JsonValue.Path)" @onmouseover="() => InteractionStore.Update?.Invoke(InteractionStore.ClickedPath, JsonValue.Path)" @onmouseover:stopPropagation>
 	@if (Schema?.Description != null)
 	{
 		<div class="description">
 			<b>Description</b>
-			<p>@Schema.Description</p>
+			<p class="description__content">@Schema.Description</p>
 		</div>
 	}
 	@switch (JsonValue.Type)
@@ -36,6 +36,9 @@
 		case JTokenType.Null:
 			<p class="null">no value (null)</p>
 			break;
+		default:
+			<p>Unrecognised type @JsonValue.Type</p>
+			break;
 	}
 	<div class="extra">
 		<Select OnChange="OnChangeType">
@@ -46,10 +49,6 @@
 				</option>
 			}
 		</Select>
-		@if (!IsAcceptableType())
-		{
-			<p class="validation-error">Invalid type, type options are: @Schema!.Type.ToString()</p>
-		}
 		@if (RelevantErrors != null)
 		{
 			@foreach (var error in RelevantErrors)

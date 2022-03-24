@@ -7,21 +7,22 @@
 		@foreach (var i in Enumerable.Range(0, JsonArray.Count)) {
 			<tr @key="i">
 				<td>[@i]</td>
-				<td>
+				<td class="value">
 					<JsonValue
 						JsonValue="@JsonArray[i]"
-						OnChange="(e) => { OnChangeProperty(i, e); }"
+						OnChange="e => { OnChangeProperty(i, e); }"
 						Name="@($"[{i}]")"
 						Errors="@Errors"
 						Schema="@GetItemSchema(i)"
 					/>
+					<Button Variant="ButtonVariant.Danger" @onclick="() => RemoveItem(i)">Remove</Button>
 				</td>
 			</tr>
 		}
 	</table>
 	<div class="add-type">
 		<Select OnChange="TypeSelected">
-			@foreach (var (typeName, type) in TypeUtils.GetPossibleTypes(GetItemSchema(JsonArray.Count)))
+			@foreach (var (typeName, type) in PossibleTypes)
 			{
 				<option value="@type">@typeName</option>
 			}

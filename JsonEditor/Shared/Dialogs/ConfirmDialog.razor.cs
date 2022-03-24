@@ -1,48 +1,29 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using JsonEditor.Shared.Generic;
 
-namespace JsonEditor.Shared.Dialogs
+namespace JsonEditor.Shared.Dialogs;
+
+public class ConfirmDialogBase : DialogBase
 {
-	public partial class ConfirmDialog : ComponentBase
-	{
-		[Parameter]
-		public string Title { get; set; } = "Alert";
+    [Parameter] public string ButtonConfirmText { get; set; } = "Confirm";
 
-		[Parameter]
-		public string ButtonConfirmText { get; set; } = "Confirm";
+    [Parameter] public ButtonVariant ConfirmButtonVariant { get; set; } = ButtonVariant.Primary;
 
-		[Parameter]
-		public ButtonVariant ConfirmButtonVariant { get; set; } = ButtonVariant.Primary;
+    [Parameter] public Action? OnCancelled { get; set; }
 
-		[Parameter]
-		public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Action? OnConfirmed { get; set; }
 
-		[Parameter]
-		public Action? OnCancelled { get; set; }
+    [Parameter] public bool ConfirmDisabled { get; set; }
 
-		[Parameter]
-		public Action? OnConfirmed { get; set; }
+    protected void Cancel()
+    {
+        Show = false;
+        OnCancelled?.Invoke();
+    }
 
-		[Parameter]
-		public Action<bool>? OnShowChangeRequest { get; set; }
-
-		[Parameter]
-		public bool Show { get; set; } = false;
-
-		[Parameter]
-		public bool ConfirmDisabled { get; set; } = false;
-
-		private void Cancel()
-		{
-			Show = false;
-			OnCancelled?.Invoke();
-		}
-
-		private void Confirm()
-		{
-			Show = false;
-			OnConfirmed?.Invoke();
-		}
-	}
+    protected void Confirm()
+    {
+        Show = false;
+        OnConfirmed?.Invoke();
+    }
 }

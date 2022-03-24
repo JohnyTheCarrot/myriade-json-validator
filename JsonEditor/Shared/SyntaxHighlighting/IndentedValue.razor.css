@@ -1,0 +1,10 @@
+.indent {
+    padding-left: 16px;
+    --color-opacity: 0.22;
+    border-left: 1px dashed rgba(0, 0, 0, var(--color-opacity));
+    font-size: 0;
+}
+
+.indent:hover {
+    --color-opacity: 1;
+}

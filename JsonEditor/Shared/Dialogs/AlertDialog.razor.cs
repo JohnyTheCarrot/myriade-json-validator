@@ -1,28 +1,13 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
-namespace JsonEditor.Shared.Dialogs
+namespace JsonEditor.Shared.Dialogs;
+
+public class AlertDialogBase : DialogBase
 {
-	public partial class AlertDialog : ComponentBase
-	{
-		[Parameter]
-		public string Title { get; set; } = "Alert";
+    [Parameter] public string ButtonConfirmText { get; set; } = "Okay";
 
-		[Parameter]
-		public string ButtonConfirmText { get; set; } = "Okay";
-
-		[Parameter]
-		public RenderFragment? ChildContent { get; set; }
-
-		[Parameter]
-		public Action<bool>? OnShowChangeRequest { get; set; }
-
-		[Parameter]
-		public bool Show { get; set; }
-
-		private void HideDialog()
-		{
-			Show = false;
-		}
-	}
+    protected void HideDialog()
+    {
+        Show = false;
+    }
 }

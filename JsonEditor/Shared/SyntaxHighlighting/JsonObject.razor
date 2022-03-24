@@ -1,0 +1,18 @@
+@using JsonEditor.Code
+@inherits JsonObjectBase
+
+<span class="curly curly--open">{</span>
+<IndentedValue>
+    @foreach (var (property, index) in JsonObject.Properties().Indexed())
+    {
+        <JsonString String="@property.Name" IsKey="true"/>
+        <span class="colon">:</span>
+        <HighlightedJsonValue JsonValue="property.Value" />
+        @if (index != JsonObject.Properties().Count() - 1)
+        {
+            <TokenComma/>
+            <Newline/>
+        }
+    }
+</IndentedValue>
+<span class="curly curly--close">}</span>

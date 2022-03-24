@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace JsonEditor.Shared.Editor
-{
-    public class ConditionalSummaryWrapperBase : ComponentBase
-    {
-        [Parameter]
-        public string? Summary { get; set; }
+namespace JsonEditor.Shared.Editor;
 
-        [Parameter]
-        public RenderFragment? ChildContent { get; set; }
-    }
+public class ConditionalSummaryWrapperBase : ComponentBase
+{
+    [Parameter] public string? Summary { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 }

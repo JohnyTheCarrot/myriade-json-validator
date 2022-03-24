@@ -1,0 +1,11 @@
+.boolean {
+    font-weight: bold;
+}
+
+.boolean[data-value="True"] {
+    color: #00b540;
+}
+
+.boolean[data-value="False"] {
+    color: red;
+}

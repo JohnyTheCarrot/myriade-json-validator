@@ -18,10 +18,16 @@
     align-items: flex-start;
 }
 
+.value[data-hover] {
+    outline: 2px solid black;
+    outline-offset: 4px;
+}
+
 .description {
     margin-bottom: 16px;
 }
 
-    .description p {
+    .description__content {
         margin: 8px 0 0;
+        white-space: pre-line;
     }

@@ -3,7 +3,7 @@ using Newtonsoft.Json.Schema;
 
 namespace JsonEditor.Code;
 
-public class TypeUtils
+public static class TypeUtils
 {
     public static IEnumerable<(string, JSchemaType)> GetPossibleTypes(JSchema? schema)
     {

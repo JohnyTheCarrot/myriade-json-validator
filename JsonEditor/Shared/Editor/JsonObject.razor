@@ -19,18 +19,21 @@
 	}
 	@if (Schema != null && GetMissingProperties()!.Any())
 	{
-		<tr>
-			<td>
-				<Select OnChange="SetSelectedProperty">
-					@foreach (var property in GetMissingProperties()!)
-					{
-						<option value="@property">@property</option>
-					}
-				</Select>
-			</td>
-			<td>
-				<Button @onclick="AddProperty">Add</Button>
-			</td>
-		</tr>
+		@if (GetMissingProperties()!.Any())
+		{
+			<tr>
+				<td>
+					<Select OnChange="SetSelectedProperty">
+						@foreach (var property in GetMissingProperties()!)
+						{
+							<option value="@property">@property</option>
+						}
+					</Select>
+				</td>
+				<td>
+					<Button @onclick="AddProperty">Add</Button>
+				</td>
+			</tr>
+		}
 	}
 </table>

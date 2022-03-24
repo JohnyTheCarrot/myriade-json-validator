@@ -2,8 +2,9 @@
 @inherits IndexBase
 @using JsonEditor.Shared.Generic
 @using JsonEditor.Shared.Dialogs
-@using JsonEditor.Code
 @using JsonEditor.Shared.Editor
+@using JsonEditor.Shared.SyntaxHighlighting
+@using JsonEditor.Code
 @using System.IO
 
 <ItemSelectDialog
@@ -21,35 +22,34 @@
 </ItemSelectDialog>
 
 <div class="content">
-	<CustomPageTitle Title="Schema Manager" />
-	<div class="schema-selector">
+	<div class="header">
+		<CustomPageTitle Title="JSON Editor"/>
 		<h3>@(SelectedSchema?.FileName ?? "No schema selected")</h3>
 		<Button @onclick="() => ShowSchemaSelectDialog = true">Select Schema</Button>
 	</div>
-	@if (JsonValid)
-	{
-		<div class="validity valid">
-			<p>JSON Valid!</p>
-		</div>
-	} else
-	{
-		<div class="validity invalid">
-			<p>JSON Invalid</p>
-			<ul>
-				@foreach (var error in Errors)
-				{
-					<li @key="@(error.LineNumber + ":" + error.LinePosition)">
-						@error.Message
-					</li>
-				}
-			</ul>
-		</div>
-	}
-	<textarea value="@JsonContent" @oninput="e => JsonContent = (e.Value as string)!"></textarea>
+	@* @foreach (var error in Errors) *@
+	@* { *@
+	@* 	<li @key="@(error.LineNumber + ":" + error.LinePosition)"> *@
+	@* 		@error.Message *@
+	@* 	</li> *@
+	@* } *@
+	@* <textarea value="@JsonContent" @oninput="e => JsonContent = (e.Value as string)!"></textarea> *@
+	<label class="file-upload">
+    	Upload File
+    	<InputFile OnChange="@LoadFile" accept=".json" />
+    </label>
 	@if (JsonObj != null)
 	{
-		<JsonValue JsonValue="@JsonObj" OnChange="OnJsonChange" Errors="@Errors" Schema="@SelectedSchema?.GetJSchema()" />
-	} else
+		<div class="json-editor">
+			<CascadingValue Value="@InteractionStore">
+				<JsonHighlighting JsonValue="@JsonObj" />
+				<div class="json-value">
+					<JsonValue JsonValue="@JsonObj" OnChange="OnJsonChange" Errors="@Errors" Schema="@SelectedSchema?.GetJSchema()" />
+				</div>
+			</CascadingValue>
+		</div>
+	}
+	else
 	{
 		<p>invalid json</p>
 	}

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace JsonEditor.Shared.Dialogs
+namespace JsonEditor.Shared.Dialogs;
+
+public class DialogContentBase : ComponentBase
 {
-	public partial class DialogContent : ComponentBase
-	{
-		[Parameter]
-		public RenderFragment? ChildContent { get; set; }
-	}
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 }

@@ -1,57 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using JsonEditor.Code;
+﻿using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
-namespace JsonEditor.Shared.Editor
+namespace JsonEditor.Shared.Editor;
+
+public class JsonArrayBase : ComponentBase
 {
-    public class JsonArrayBase : ComponentBase
+    [Parameter, EditorRequired] public JArray JsonArray { get; set; } = default!;
+
+    [Parameter] public Action<JArray>? OnChange { get; set; }
+
+    [Parameter, EditorRequired] public IList<ValidationError>? Errors { get; set; }
+
+    [Parameter] public JSchema? Schema { get; set; }
+
+    private string? _selectedType;
+    protected IEnumerable<(string, JSchemaType)> PossibleTypes => TypeUtils.GetPossibleTypes(GetItemSchema(JsonArray.Count));
+
+    protected void OnChangeProperty(int index, JToken newValue)
     {
-        [Parameter, EditorRequired]
-        public JArray JsonArray { get; set; } = default!;
+        JsonArray[index] = newValue;
+        OnChange?.Invoke(JsonArray);
+    }
 
-        [Parameter]
-        public Action<JArray>? OnChange { get; set; }
+    protected JSchema? GetItemSchema(int index)
+    {
+        if (Schema == null)
+            return null;
 
-        [Parameter, EditorRequired]
-        public IList<ValidationError>? Errors { get; set; }
-        
-        [Parameter] public JSchema? Schema { get; set; }
+        return Schema.Items.Count == 1 ? Schema.Items[0] : Schema.Items[index];
+    }
 
-        private string? _selectedType;
+    protected void TypeSelected(string value)
+    {
+        _selectedType = value;
+    }
 
-        protected void OnChangeProperty(int index, JToken newValue)
-        {
-            JsonArray[index] = newValue;
-            OnChange?.Invoke(JsonArray);
-        }
+    protected void Add()
+    {
+        _selectedType ??= PossibleTypes.First().Item2.ToString();
 
-        protected JSchema? GetItemSchema(int index)
-        {
-            if (Schema == null)
-                return null;
+        var type = Enum.Parse<JSchemaType>(_selectedType);
+        var jTokenType = TypeUtils.JSchemaTypeToJTokenType(type)[0];
 
-            return Schema.Items.Count == 1 ? Schema.Items[0] : Schema.Items[index];
-        }
+        var defaultValue = TypeUtils.GetDefaultValue(jTokenType);
+        JsonArray.Add(defaultValue);
+        OnChange?.Invoke(JsonArray);
+    }
 
-        protected void TypeSelected(string value)
-        {
-            _selectedType = value;
-        }
-
-        protected void Add()
-        {
-            if (_selectedType == null)
-                return;
-            
-            var type = Enum.Parse<JSchemaType>(_selectedType);
-            var jTokenType = TypeUtils.JSchemaTypeToJTokenType(type)[0];
-            
-            var defaultValue = TypeUtils.GetDefaultValue(jTokenType);
-            JsonArray.Add(defaultValue);
-            OnChange?.Invoke(JsonArray);
-        }
+    protected void RemoveItem(int index)
+    {
+        JsonArray.RemoveAt(index);
+        OnChange?.Invoke(JsonArray);
     }
 }

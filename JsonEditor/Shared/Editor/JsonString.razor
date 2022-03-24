@@ -1,4 +1,16 @@
 ﻿@inherits JsonStringBase
 @using JsonEditor.Shared.Generic
 
-<Input @oninput="OnInput" Value="@Value" TValue="string" />
+@if (IsEnum)
+{
+    <Select OnChange="OnSelectChanged">
+        @foreach (var option in Schema!.Enum)
+        {
+            <option @key="option" value="@option">@option</option>
+        }
+    </Select>
+}
+else
+{
+    <Input @oninput="OnInput" Value="@Value" TValue="string"/>
+}

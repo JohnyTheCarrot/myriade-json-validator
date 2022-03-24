@@ -1,0 +1,13 @@
+.json-highlighting {
+    font-family: monospace;
+    font-size: 0;
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #5773cd;
+    overflow-y: auto;
+}
+
+::deep span {
+    font-size: 16px;
+}

@@ -1,0 +1,39 @@
+@using Newtonsoft.Json.Linq
+@inherits HighlightedJsonValueBase
+
+<span
+    class="json-value"
+    data-hover="@Hover"
+    @onclick="MouseClick"
+    @onmouseover="MouseOver"
+    @onmouseover:stopPropagation
+    @onclick:stopPropagation
+>
+    @switch (JsonValue.Type)
+    {
+        case JTokenType.Object:
+            <JsonObject JsonObject="JsonValue as JObject"/>
+            break;
+        case JTokenType.Array:
+            <JsonArray JsonArray="JsonValue as JArray"/>
+            break;
+        case JTokenType.String:
+            <JsonString String="@(JsonValue.ToString())"/>
+            break;
+        case JTokenType.Float:
+            <JsonNumber TValue="float" Value="JsonValue.Value<float>()"/>
+            break;
+        case JTokenType.Integer:
+            <JsonNumber TValue="long" Value="JsonValue.Value<long>()"/>
+            break;
+        case JTokenType.Boolean:
+            <JsonBoolean Value="JsonValue.Value<bool>()"/>
+            break;
+        case JTokenType.Null:
+            <JsonNull/>
+            break;
+        default:
+            <span>@JsonValue.Type</span>
+            break;
+    }
+</span>

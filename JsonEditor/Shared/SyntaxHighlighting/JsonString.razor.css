@@ -1,0 +1,8 @@
+.string {
+    color: #ff577e;
+    white-space: pre;
+}
+
+.string[data-is-key] {
+    color: #4d73ff;
+}

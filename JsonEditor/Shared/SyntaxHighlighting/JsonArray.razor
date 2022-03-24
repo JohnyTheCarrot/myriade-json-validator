@@ -1,0 +1,19 @@
+@using JsonEditor.Code
+@inherits JsonArrayBase
+
+<span class="square square--open">[</span>
+@if (JsonArray.Count != 0)
+{
+    <IndentedValue>
+        @foreach (var (item, index) in JsonArray.Indexed())
+        {
+            <HighlightedJsonValue JsonValue="item" />
+            @if (index != JsonArray.Count - 1)
+            {
+                <TokenComma/>
+                <Newline/>
+            }
+        }
+    </IndentedValue>
+}
+<span class="square square--close">]</span>

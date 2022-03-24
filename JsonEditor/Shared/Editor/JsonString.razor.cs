@@ -1,22 +1,34 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Schema;
 
-namespace JsonEditor.Shared.Editor
+namespace JsonEditor.Shared.Editor;
+
+public class JsonStringBase : ComponentBase
 {
-    public class JsonStringBase : ComponentBase
+    [Parameter, EditorRequired] public string Value { get; set; } = default!;
+
+    [Parameter] public Action<string>? OnChange { get; set; }
+
+    [Parameter] public JSchema? Schema { get; set; }
+
+    protected bool IsEnum => Schema?.Enum.Count > 0;
+
+    protected override void OnInitialized()
     {
-        [Parameter, EditorRequired]
-        public string Value { get; set; } = default!;
+        if (!IsEnum)
+            return;
 
-        [Parameter]
-        public Action<string>? OnChange { get; set; }
-        
-        [Parameter] public JSchema? Schema { get; set; }
+        var enumOption = Schema!.Enum[0];
+        OnChange?.Invoke((string) enumOption!);
+    }
 
-        protected void OnInput(ChangeEventArgs e)
-        {
-            OnChange?.Invoke((e.Value as string)!);
-        }
+    protected void OnInput(ChangeEventArgs e)
+    {
+        OnChange?.Invoke((e.Value as string)!);
+    }
+
+    protected void OnSelectChanged(string value)
+    {
+        OnChange?.Invoke(value);
     }
 }

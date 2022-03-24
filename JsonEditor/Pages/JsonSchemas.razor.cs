@@ -1,52 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using JsonEditor.Code;
+﻿using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Hosting;
 
-namespace JsonEditor.Pages
+namespace JsonEditor.Pages;
+
+public class JsonSchemasBase : ComponentBase
 {
-    public class JsonSchemasBase : ComponentBase
+    protected bool IsUploading, HasStartedUpload;
+
+    [Inject] protected IWebHostEnvironment Environment { get; set; } = default!;
+
+    protected readonly List<SchemaManagementResult> UploadResults = new();
+    protected List<Schema> Schemas = new();
+
+    protected void UpdateSchemasList()
     {
-	    protected bool IsUploading, HasStartedUpload;
+        Schemas = Schema.GetSchemas(Environment.ContentRootPath);
+        StateHasChanged();
+    }
 
-		[Inject]
-		protected IWebHostEnvironment Environment { get; set; } = default!;
+    protected override void OnInitialized()
+    {
+        UpdateSchemasList();
+    }
 
-		protected readonly List<SchemaManagementResult> UploadResults = new();
-		protected List<Schema> Schemas = new();
+    protected async Task SaveSchemas(InputFileChangeEventArgs e)
+    {
+        UploadResults.Clear();
+        HasStartedUpload = true;
+        if (e.FileCount > Schema.MaxNumberOfFilesPerUpload)
+        {
+            return;
+        }
 
-		protected void UpdateSchemasList()
-		{
-			Schemas = Schema.GetSchemas(Environment.ContentRootPath);
-			StateHasChanged();
-		}
+        IsUploading = true;
+        var files = e.GetMultipleFiles(Schema.MaxNumberOfFilesPerUpload);
 
-		protected override void OnInitialized()
-		{
-			UpdateSchemasList();
-		}
+        foreach (var file in files)
+        {
+            var result = await Schema.SaveSchema(Environment.ContentRootPath, file);
+            UploadResults.Add(result);
+        }
 
-		protected async Task SaveSchema(InputFileChangeEventArgs e)
-		{
-			UploadResults.Clear();
-			HasStartedUpload = true;
-			if (e.FileCount > Schema.MaxNumberOfFilesPerUpload)
-			{
-				return;
-			}
-			IsUploading = true;
-			var files = e.GetMultipleFiles(Schema.MaxNumberOfFilesPerUpload);
-
-			foreach (var file in files)
-			{
-				var result = await Schema.SaveSchema(Environment.ContentRootPath, file);
-				UploadResults.Add(result);
-			}
-
-			IsUploading = false;
-			UpdateSchemasList();
-		}
-	}
+        IsUploading = false;
+        UpdateSchemasList();
+    }
 }

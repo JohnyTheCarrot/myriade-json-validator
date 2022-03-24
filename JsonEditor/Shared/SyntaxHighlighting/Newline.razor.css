@@ -1,0 +1,4 @@
+.newline::after {
+    content: "\a";
+    white-space: pre;
+}

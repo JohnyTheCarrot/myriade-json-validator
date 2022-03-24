@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using JsonEditor.Code;
+﻿using JsonEditor.Code;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
@@ -9,18 +7,20 @@ namespace JsonEditor.Shared.Editor;
 
 public class JsonObjectBase : ComponentBase
 {
-    [Parameter, EditorRequired]
-    public JObject JsonObject { get; set; } = default!;
+    [Parameter, EditorRequired] public JObject JsonObject { get; set; } = default!;
 
-    [Parameter]
-    public Action<JObject>? OnChange { get; set; }
+    [Parameter] public Action<JObject>? OnChange { get; set; }
 
-    [Parameter, EditorRequired]
-    public IList<ValidationError>? Errors { get; set; }
-        
+    [Parameter, EditorRequired] public IList<ValidationError>? Errors { get; set; }
+
     [Parameter] public JSchema? Schema { get; set; }
 
     private string? _selectedProperty;
+
+    protected override void OnInitialized()
+    {
+        AddRequiredProperties();
+    }
 
     protected void OnChangeProperty(string key, JToken newValue)
     {
@@ -45,13 +45,23 @@ public class JsonObjectBase : ComponentBase
             properties?.Any() == true &&
             (
                 _selectedProperty == null
-                || _selectedProperty != null 
+                || _selectedProperty != null
                 && !properties.Contains(_selectedProperty)
             )
         )
             _selectedProperty = properties.First();
 
         return properties;
+    }
+
+    private IEnumerable<string>? GetMissingRequiredProperties()
+    {
+        var requiredProperties = Schema?.Required;
+        var missingProperties = GetMissingProperties();
+
+        return missingProperties == null 
+            ? null
+            : requiredProperties?.Where(p => missingProperties.Contains(p));
     }
 
     protected void SetSelectedProperty(string property)
@@ -66,6 +76,20 @@ public class JsonObjectBase : ComponentBase
 
         var schemaType = TypeUtils.JSchemaTypeToJTokenType((JSchemaType) Schema.Properties[_selectedProperty].Type!)[0];
         JsonObject[_selectedProperty] = TypeUtils.GetDefaultValue(schemaType);
+        OnChange?.Invoke(JsonObject);
+    }
+
+    private void AddRequiredProperties()
+    {
+        if (Schema == null)
+            return;
+
+        var missingRequiredProperties = GetMissingRequiredProperties()!;
+        foreach (var property in missingRequiredProperties)
+        {
+            var propertyType = TypeUtils.JSchemaTypeToJTokenType((JSchemaType) Schema.Properties[property].Type!)[0];
+            JsonObject[property] = TypeUtils.GetDefaultValue(propertyType);
+        }
         OnChange?.Invoke(JsonObject);
     }
 }

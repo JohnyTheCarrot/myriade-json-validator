@@ -1,26 +1,25 @@
-﻿namespace JsonEditor.Code
+﻿namespace JsonEditor.Code;
+
+public class SchemaManagementSuccess : SchemaManagementResult
 {
-	public class SchemaManagementSuccess : SchemaManagementResult
-	{
-		public SchemaManagementSuccess(string schema) : base(schema, "Success!")
-		{ }
-	}
+	public SchemaManagementSuccess(string schema) : base(schema, "Success!")
+	{ }
+}
 
-	public class SchemaManagementFailure : SchemaManagementResult
-	{
-		public SchemaManagementFailure(string schema, string message) : base(schema, message)
-		{ }
-	}
+public class SchemaManagementFailure : SchemaManagementResult
+{
+	public SchemaManagementFailure(string schema, string message) : base(schema, message)
+	{ }
+}
 
-	public class SchemaManagementResult
-	{
-		public string Message { get; private set; }
-		public string Schema { get; private set; }
+public class SchemaManagementResult
+{
+	public string Message { get; }
+	public string Schema { get; }
 
-		protected SchemaManagementResult(string schema, string message)
-		{
-			Schema = schema;
-			Message = message;
-		}
+	protected SchemaManagementResult(string schema, string message)
+	{
+		Schema = schema;
+		Message = message;
 	}
 }

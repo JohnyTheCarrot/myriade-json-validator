@@ -1,15 +1,11 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 
-namespace JsonEditor.Shared.Editor
-{
-    public class JsonBooleanBase : ComponentBase
-    {
-        [Parameter, EditorRequired]
-        public bool Value { get; set; }
+namespace JsonEditor.Shared.Editor;
 
-        [Parameter, EditorRequired]
-        public Action<JToken> OnChange { get; set; } = default!;
-    }
+public class JsonBooleanBase : ComponentBase
+{
+    [Parameter, EditorRequired] public bool Value { get; set; }
+
+    [Parameter, EditorRequired] public Action<JToken> OnChange { get; set; } = default!;
 }

@@ -1,15 +1,16 @@
-﻿@typeparam TItem
+﻿@typeparam TItem where TItem : class
+@inherits ItemSelectDialogBase<TItem>
 @using JsonEditor.Shared.Generic
 
 <ConfirmDialog
 	Title="@Title"
 	Show="@Show"
-	OnConfirmed="() => { if (_selectedItem != null) OnConfirmed?.Invoke(_selectedItem); }"
-	ConfirmDisabled="@(_selectedItem == null)"
+	OnConfirmed="() => { if (SelectedItem != null) OnConfirmed?.Invoke(SelectedItem); }"
+	ConfirmDisabled="@(SelectedItem == null)"
 	OnShowChangeRequest="@OnShowChangeRequest"
 >
 	<div class="search-bar">
-		<Input Value="@_search" @oninput="SearchUpdated" Placeholder="Search..." TValue="string" />
+		<Input Value="@Search" @oninput="SearchUpdated" Placeholder="Search..." TValue="string" />
 	</div>
 	<div class="list">
 		@if (Letters.Length == 0)
@@ -21,12 +22,12 @@
 				@letter
 			</h3>
 			<ul>
-				@foreach (var row in DataFiltered!.Where(r => SearchByExtractor!.Invoke(r)[0] == letter))
+				@foreach (var row in DataFiltered.Where(r => SearchByExtractor!.Invoke(r)[0] == letter))
 				{
 					<li
 						@key="@($"row-{SearchByExtractor!.Invoke(row)}")"
-						@onclick="() => _selectedItem = row"
-						data-selected="@(_selectedItem == row)"
+						@onclick="() => SelectedItem = row"
+						data-selected="@(SelectedItem == row)"
 					>
 						@RowTemplate!.Invoke(row)
 					</li>
