@@ -6,6 +6,7 @@
     border-radius: 4px;
     border: 1px solid #5773cd;
     overflow-y: auto;
+    position: relative;
 }
 
 ::deep span {

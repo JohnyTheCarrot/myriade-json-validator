@@ -3,7 +3,12 @@
 @using JsonEditor.Shared.Generic
 @using JsonEditor.Code
 
-<div class="value" data-hover="@(InteractionStore.HoveredPath == JsonValue.Path)" @onmouseover="() => InteractionStore.Update?.Invoke(InteractionStore.ClickedPath, JsonValue.Path)" @onmouseover:stopPropagation>
+<div
+	class="value"
+	id="@($"editor#{ValuePath}")"
+	onmouseover="(() => {highlightValueByPath(@($"\"{ValuePath}\""), true); event.stopPropagation()})(event)"
+    onmouseleave="(() => highlightValueByPath(@($"\"{ValuePath}\""), false))()"
+>
 	@if (Schema?.Description != null)
 	{
 		<div class="description">

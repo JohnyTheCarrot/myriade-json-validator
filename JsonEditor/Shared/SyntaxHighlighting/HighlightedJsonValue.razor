@@ -3,11 +3,9 @@
 
 <span
     class="json-value"
-    data-hover="@Hover"
-    @onclick="MouseClick"
-    @onmouseover="MouseOver"
-    @onmouseover:stopPropagation
-    @onclick:stopPropagation
+    id="@($"highlighter#{ValuePath}")"
+    onmouseover="(() => {highlightValueByPath(@($"\"{ValuePath}\""), true); event.stopPropagation()})(event)"
+    onmouseleave="(() => highlightValueByPath(@($"\"{ValuePath}\""), false))()"
 >
     @switch (JsonValue.Type)
     {

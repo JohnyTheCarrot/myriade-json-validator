@@ -11,6 +11,16 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="JsonEditor.styles.css" rel="stylesheet" />
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    <script>
+        function highlightValueByPath(path, highlight) {
+            document
+                .getElementById(`editor#${path}`)
+                .setAttribute("data-hover", highlight);
+            document
+                .getElementById(`highlighter#${path}`)
+                .setAttribute("data-hover", highlight);
+        }
+    </script>
 </head>
 <body>
     @RenderBody()

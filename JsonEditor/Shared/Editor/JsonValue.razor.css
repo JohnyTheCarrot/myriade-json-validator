@@ -18,7 +18,7 @@
     align-items: flex-start;
 }
 
-.value[data-hover] {
+.value[data-hover="true"] {
     outline: 2px solid black;
     outline-offset: 4px;
 }

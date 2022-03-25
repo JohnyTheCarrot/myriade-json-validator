@@ -22,23 +22,11 @@ public class JsonValueBase : HoverableBase
 
     [Parameter] public string? Name { get; set; }
 
-    protected bool Hover => InteractionStore.HoveredPath == JsonValue.Path;
+    protected string? ValuePath;
 
-    protected bool IsAcceptableType()
+    protected override void OnInitialized()
     {
-        if (Schema == null)
-            return true;
-
-        bool CheckType(JSchemaType type) =>
-            (Schema!.Type & type) != 0 && type == TypeUtils.JTokenTypeToJSchemaType(JsonValue.Type);
-
-        return CheckType(JSchemaType.String)
-               || CheckType(JSchemaType.Array)
-               || CheckType(JSchemaType.Boolean)
-               || CheckType(JSchemaType.Integer)
-               || CheckType(JSchemaType.Null)
-               || CheckType(JSchemaType.Number)
-               || CheckType(JSchemaType.Object);
+        ValuePath = JsonValue.Path;
     }
 
     protected void OnChangeType(string stringValue)
